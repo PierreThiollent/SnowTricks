@@ -1071,6 +1071,18 @@
     anymatch "^3.0.0"
     source-map "^0.6.0"
 
+"@vue/reactivity@^3.0.2":
+  version "3.2.10"
+  resolved "https://registry.yarnpkg.com/@vue/reactivity/-/reactivity-3.2.10.tgz#88fd4a8a3b4129d7625eb320038d1c48e309e5f9"
+  integrity sha512-99y12RahDwBC75NwX9aFDXKLSvW66gMjl/9CNrufGQTth2fWadGxJedvKXs46ZPyiu7bFMERLY9X9Jz4GWOIDw==
+  dependencies:
+    "@vue/shared" "3.2.10"
+
+"@vue/shared@3.2.10":
+  version "3.2.10"
+  resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.2.10.tgz#76ffa503019e52463367e25275656d1d299dc91c"
+  integrity sha512-Z5hbCx5jqAK0kscWcsVBpEeS0LfuSjgnkCBewQfsdBRyvHdJWKRUnCAJ7GqJO/iJtjSZHBFJYNoYyP7a/goh2A==
+
 "@webassemblyjs/ast@1.11.1":
   version "1.11.1"
   resolved "https://registry.yarnpkg.com/@webassemblyjs/ast/-/ast-1.11.1.tgz#2bfd767eae1a6996f432ff7e8d7fc75679c0b6a7"
@@ -1291,6 +1303,13 @@ alphanum-sort@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
+
+alpinejs@^3.3.2:
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/alpinejs/-/alpinejs-3.3.2.tgz#566576b704def88364118baa0d8095b5ffc4a785"
+  integrity sha512-JnED6Pp9v/m3M7S9p4+V5ztcfxcGi6PHrXt1Vjz4PGRkLKGsv5FU0dTZRO5A/QYaSwitzfCgnmjgrUeHaIea6Q==
+  dependencies:
+    "@vue/reactivity" "^3.0.2"
 
 ansi-html@^0.0.7:
   version "0.0.7"
