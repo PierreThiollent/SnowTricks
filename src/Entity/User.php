@@ -4,11 +4,13 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(fields={"username"}, message="Ce nom d'utilisateur n'est pas disponible.")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -37,9 +39,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @var string The user email
-     * @ORM\Column(type="string", unique=true)
+     * @ORM\Column(type="string")
      */
     private string $email;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $isVerified = false;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private ?string $firstname;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private ?string $lastname;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $imageUrl;
+
+    public function __construct()
+    {
+        $this->roles = ['ROLE_USER'];
+    }
+
 
     public function getId(): ?int
     {
@@ -139,5 +167,53 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(?string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(?string $lastname): self
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getImageUrl(): ?string
+    {
+        return $this->imageUrl;
+    }
+
+    public function setImageUrl(?string $imageUrl): self
+    {
+        $this->imageUrl = $imageUrl;
+
+        return $this;
     }
 }

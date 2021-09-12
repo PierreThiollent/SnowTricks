@@ -1,4 +1,4 @@
-    {
+{
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",
@@ -10,7 +10,6 @@
         "composer/package-versions-deprecated": "1.11.99.2",
         "doctrine/annotations": "^1.0",
         "doctrine/doctrine-bundle": "^2.4",
-        "doctrine/doctrine-migrations-bundle": "^3.1",
         "doctrine/orm": "^2.9",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^6.1",
@@ -42,6 +41,7 @@
         "symfony/web-link": "5.3.*",
         "symfony/webpack-encore-bundle": "^1.12",
         "symfony/yaml": "5.3.*",
+        "symfonycasts/verify-email-bundle": "^1.5",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0"
     },
