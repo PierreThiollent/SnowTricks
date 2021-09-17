@@ -1,23 +1,30 @@
 {% for successMessage in app.flashes('success') %}
-    <div x-data
-         class="py-3 px-5 mt-6 mb-4 bg-green-100 text-green-900 text-base rounded-md border border-green-200 relative"
-         role="alert">
-        {{ successMessage }}
-        <svg class="svg-icon absolute right-4 inset-y-0 cursor-pointer h-full w-5 text-red-500" viewBox="0 0 20 20"
-             fill="red"
-             @click="$el.parentElement.remove()">
-            <path d="M15.898,4.045c-0.271-0.272-0.713-0.272-0.986,0l-4.71,4.711L5.493,4.045c-0.272-0.272-0.714-0.272-0.986,0s-0.272,0.714,0,0.986l4.709,4.711l-4.71,4.711c-0.272,0.271-0.272,0.713,0,0.986c0.136,0.136,0.314,0.203,0.492,0.203c0.179,0,0.357-0.067,0.493-0.203l4.711-4.711l4.71,4.711c0.137,0.136,0.314,0.203,0.494,0.203c0.178,0,0.355-0.067,0.492-0.203c0.273-0.273,0.273-0.715,0-0.986l-4.711-4.711l4.711-4.711C16.172,4.759,16.172,4.317,15.898,4.045z"></path>
-        </svg>
+    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 relative top-16">
+        <div x-data
+             class="py-3 px-5 mt-6 mb-4 bg-green-100 text-green-900 text-base rounded-md border border-green-200 relative"
+             role="alert">
+            {{ successMessage }}
+            <svg class="svg-icon absolute right-4 inset-y-0 cursor-pointer h-full w-5 text-red-500" viewBox="0 0 20 20"
+                 fill="red"
+                 @click="$el.parentElement.remove()">
+                <path d="M15.898,4.045c-0.271-0.272-0.713-0.272-0.986,0l-4.71,4.711L5.493,4.045c-0.272-0.272-0.714-0.272-0.986,0s-0.272,0.714,0,0.986l4.709,4.711l-4.71,4.711c-0.272,0.271-0.272,0.713,0,0.986c0.136,0.136,0.314,0.203,0.492,0.203c0.179,0,0.357-0.067,0.493-0.203l4.711-4.711l4.71,4.711c0.137,0.136,0.314,0.203,0.494,0.203c0.178,0,0.355-0.067,0.492-0.203c0.273-0.273,0.273-0.715,0-0.986l-4.711-4.711l4.711-4.711C16.172,4.759,16.172,4.317,15.898,4.045z"></path>
+            </svg>
+        </div>
     </div>
 {% endfor %}
 
 {% for errorMessage in app.flashes('error') %}
-    <div class="py-3 px-5 mb-4 mt-6 bg-red-100 text-red-900 text-base rounded-md border border-red-200 relative" role="alert">
-        {{ errorMessage }}
-        <svg class="svg-icon absolute right-4 inset-y-0 cursor-pointer h-full w-5 text-red-500" viewBox="0 0 20 20"
-             fill="red"
-             @click="$el.parentElement.remove()">
-            <path d="M15.898,4.045c-0.271-0.272-0.713-0.272-0.986,0l-4.71,4.711L5.493,4.045c-0.272-0.272-0.714-0.272-0.986,0s-0.272,0.714,0,0.986l4.709,4.711l-4.71,4.711c-0.272,0.271-0.272,0.713,0,0.986c0.136,0.136,0.314,0.203,0.492,0.203c0.179,0,0.357-0.067,0.493-0.203l4.711-4.711l4.71,4.711c0.137,0.136,0.314,0.203,0.494,0.203c0.178,0,0.355-0.067,0.492-0.203c0.273-0.273,0.273-0.715,0-0.986l-4.711-4.711l4.711-4.711C16.172,4.759,16.172,4.317,15.898,4.045z"></path>
-        </svg>
+    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 relative top-16">
+        <div x-data
+             class="py-3 px-5 mb-4 mt-6 bg-red-100 text-red-900 text-base rounded-md border border-red-200 relative"
+             role="alert">
+            {{ errorMessage }}
+            <svg class="svg-icon absolute right-4 inset-y-0 cursor-pointer h-full w-5 text-red-500"
+                 viewBox="0 0 20 20"
+                 fill="red"
+                 @click="$el.parentElement.remove()">
+                <path d="M15.898,4.045c-0.271-0.272-0.713-0.272-0.986,0l-4.71,4.711L5.493,4.045c-0.272-0.272-0.714-0.272-0.986,0s-0.272,0.714,0,0.986l4.709,4.711l-4.71,4.711c-0.272,0.271-0.272,0.713,0,0.986c0.136,0.136,0.314,0.203,0.492,0.203c0.179,0,0.357-0.067,0.493-0.203l4.711-4.711l4.71,4.711c0.137,0.136,0.314,0.203,0.494,0.203c0.178,0,0.355-0.067,0.492-0.203c0.273-0.273,0.273-0.715,0-0.986l-4.711-4.711l4.711-4.711C16.172,4.759,16.172,4.317,15.898,4.045z"></path>
+            </svg>
+        </div>
     </div>
 {% endfor %}
