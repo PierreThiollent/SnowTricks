@@ -35,9 +35,12 @@ return static function (RoutingConfigurator $routes) {
         ->controller([ResetPasswordController::class, 'checkEmail'])
         ->methods(['GET', 'POST']);
 
-
     $routes->add('app_reset_password', '/reinitialisation-mot-de-passe/{token}')
         ->controller([ResetPasswordController::class, 'reset'])
         ->methods(['GET', 'POST'])
         ->defaults(['token' => null]);
+
+    $routes->add('app_load_ajax_tricks', '/load-posts/{offset}')
+        ->controller([HomeController::class, 'loadMoreTricks'])
+        ->methods(['GET']);
 };
