@@ -3,7 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
+use phpDocumentor\Reflection\Types\Iterable_;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -11,6 +15,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"username"}, message="Ce nom d'utilisateur n'est pas disponible.")
+ * @UniqueEntity(fields={"email"}, message="Cette adresse email est déjà utilisée.")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -39,7 +44,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @var string The user email
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", unique=true)
      */
     private string $email;
 
@@ -63,9 +68,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private ?string $imageUrl;
 
-    public function __construct()
+    /**
+     * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="user", orphanRemoval=true)
+     */
+    private Collection $tricks;
+
+    #[Pure] public function __construct()
     {
         $this->roles = ['ROLE_USER'];
+        $this->tricks = new ArrayCollection();
     }
 
 
@@ -213,6 +224,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setImageUrl(?string $imageUrl): self
     {
         $this->imageUrl = $imageUrl;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getTricks(): Collection
+    {
+        return $this->tricks;
+    }
+
+    public function addTrick(Trick $trick): self
+    {
+        if (!$this->tricks->contains($trick)) {
+            $this->tricks[] = $trick;
+            $trick->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTrick(Trick $trick): self
+    {
+        // set the owning side to null (unless already changed)
+        if ($this->tricks->removeElement($trick) && $trick->getUser() === $this) {
+            $trick->setUser(null);
+        }
 
         return $this;
     }
