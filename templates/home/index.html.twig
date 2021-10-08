@@ -5,6 +5,40 @@
 {% endblock %}
 
 {% block body %}
+
+    <section class="flex flex-col justify-center h-screen bg-fixed bg-center bg-cover bg-no-repeat"
+             style=" background-image:linear-gradient(rgba(135, 80, 156, 0.9), rgba(135, 80, 156, 0.9)), url(https://musicapp.bleext.com/storage/users/14/posts/69/php7CGTMq.jpg)">
+        <h1 class="ml-24 text-white text-6xl tracking-tight font-serif leading-none">
+            Bienvenue sur Snowtricks
+        </h1>
+        <p class="mt-4 mx-24 text-xl text-white font-sans text-opacity-75">
+            Connect with people and find new friends!
+            Join our community<br> of professionals around the world.
+        </p>
+        <p class="mx-24 mt-8">
+            <a class="px-4 py-2 border-2 border-white rounded text-white text-lg hover:bg-white hover:text-purple-700"
+               href="#tricks">Consulter les tricks</a>
+        </p>
+        <a href="#tricks" title="Voir les tricks" class="absolute bottom-12 right-12">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                 stroke="#fff">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z"/>
+            </svg>
+        </a>
+    </section>
+
+    <section x-data="loadMorePosts" class="mb-24">
+        <div id="tricks" class="px-10 py-20 flex justify-around flex-wrap">
+            {% include 'tricks/tricks.html.twig' %}
+        </div>
+
+        <button @click="fetchPosts"
+                class="block mt-4 mx-auto px-4 py-2 border-2 border-white rounded text-white text-lg bg-gray-800 hover:bg-white hover:text-gray-800">
+            Charger plus...
+        </button>
+    </section>
+
 {% endblock %}
 
 {% block javascripts %}
