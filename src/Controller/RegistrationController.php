@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
-use App\Security\EmailVerifier;
+use App\Service\EmailVerifier;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,9 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
 {
@@ -55,7 +52,10 @@ class RegistrationController extends AbstractController
             );
 
             // do anything else you need here, like send an email
-            $this->addFlash('success', 'Un email de confirmation vient de vous être envoyé. Veuillez cliquer sur le lien afin de confirmer votre compte.');
+            $this->addFlash(
+                'success',
+                'Un email de confirmation vient de vous être envoyé. Veuillez cliquer sur le lien afin de confirmer votre compte.'
+            );
 
             return $this->redirectToRoute('app_register');
         }
@@ -82,13 +82,12 @@ class RegistrationController extends AbstractController
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $user);
-        } catch (VerifyEmailExceptionInterface $exception) {
-            $this->addFlash('error', $exception->getReason());
+        } catch (\Exception $exception) {
+            $this->addFlash('error', $exception->getMessage());
 
             return $this->redirectToRoute('app_register');
         }
 
-        // @TODO Change the redirect on success and handle or remove the flash message in your templates
         $this->addFlash('success', 'Votre compte a bien été confirmé, vous pouvez maintenant vous identifier.');
 
         return $this->redirectToRoute('app_login');
