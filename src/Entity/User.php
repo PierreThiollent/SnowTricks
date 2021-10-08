@@ -34,7 +34,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="json")
      */
-    private array $roles = [];
+    private array $roles;
 
     /**
      * @var string The hashed password
@@ -73,12 +73,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private Collection $tricks;
 
-    #[Pure] public function __construct()
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private ?string $verifyToken;
+
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private ?\DateTimeInterface $requestedAt;
+
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private ?\DateTimeInterface $expiresAt;
+
+    /**
+     * @throws \Exception
+     */
+    public function __construct()
     {
         $this->roles = ['ROLE_USER'];
         $this->tricks = new ArrayCollection();
+        $this->requestedAt = new \DateTimeImmutable('now');
+        $this->verifyToken = bin2hex(random_bytes(20));
+        $this->expiresAt = new \DateTime('now +7 days');
     }
-
 
     public function getId(): ?int
     {
@@ -252,6 +272,47 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->tricks->removeElement($trick) && $trick->getUser() === $this) {
             $trick->setUser(null);
         }
+
+        return $this;
+    }
+
+    public function getVerifyToken(): ?string
+    {
+        return $this->verifyToken;
+    }
+
+    public function setVerifyToken(?string $verifyToken): self
+    {
+        $this->verifyToken = $verifyToken;
+
+        return $this;
+    }
+
+    public function getRequestedAt(): ?\DateTimeInterface
+    {
+        return $this->requestedAt;
+    }
+
+    public function setRequestedAt(?\DateTimeInterface $requestedAt): self
+    {
+        $this->requestedAt = $requestedAt;
+
+        return $this;
+    }
+
+    public function isExpired(): bool
+    {
+        return $this->expiresAt->getTimestamp() <= time();
+    }
+
+    public function getExpiresAt(): ?\DateTimeInterface
+    {
+        return $this->expiresAt;
+    }
+
+    public function setExpiresAt(?\DateTimeInterface $expiresAt): self
+    {
+        $this->expiresAt = $expiresAt;
 
         return $this;
     }
