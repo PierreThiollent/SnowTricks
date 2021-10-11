@@ -8,12 +8,12 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class EmailVerifier
+class ConfirmAccountEmail
 {
     public function __construct(
-        private UrlGeneratorInterface  $urlGenerator,
         private MailerInterface        $mailer,
         private EntityManagerInterface $entityManager
     )
@@ -23,18 +23,20 @@ class EmailVerifier
     /**
      * @throws TransportExceptionInterface
      */
-    public function sendEmailConfirmation(string $verifyEmailRouteName, User $user, TemplatedEmail $email): void
+    public function sendEmailConfirmation(User $user): void
     {
-        $resetUrl = $this->urlGenerator->generate($verifyEmailRouteName, [
-            'expires' => $user->getExpiresAt()?->getTimestamp(),
-            'id'      => $user->getId(),
-            'token'   => $user->getVerifyToken(),
-        ], UrlGeneratorInterface::ABSOLUTE_URL);
+        $email = (new TemplatedEmail())
+            ->from(new Address(
+                'inscription@snowtricks.pierre-thiollent.fr',
+                'Inscription Snowtricks'))
+            ->to($user->getEmail())
+            ->subject("Snowtricks - Confirmation de l'email")
+            ->htmlTemplate('registration/confirmation_email.html.twig');
 
         $context = $email->getContext();
-        $context['signedUrl'] = $resetUrl;
-        $context['expiresAt'] = $user->getExpiresAt()?->format('d/m/Y');
-
+        $context['id'] = $user->getId();
+        $context['token'] = $user->getVerifyToken();
+        $context['expiresAt'] = $user->getExpiresAt();
         $email->context($context);
 
         $this->mailer->send($email);
@@ -43,12 +45,10 @@ class EmailVerifier
     /**
      * @throws \Exception
      */
-    public function handleEmailConfirmation(Request $request, User $user): void
+    public function handleEmailConfirmation(User $user, string $token): void
     {
-        if ($user->isExpired()) {
+        if ($user->isExpired() || $token !== $user->getVerifyToken()) {
             throw new \Exception('Votre lien de confirmation est expiré, veuillez nous contacter, nous vous enverrons un nouveau lien.');
-        } elseif ((int)$request->get('id') !== $user->getId() || $request->get('token') !== $user->getVerifyToken()) {
-            throw new \Exception('Votre lien de confirmation est invalide.');
         }
 
         $user->setIsVerified(true);

@@ -23,7 +23,7 @@ return static function (RoutingConfigurator $routes) {
         ->controller([RegistrationController::class, 'register'])
         ->methods(['GET', 'POST']);
 
-    $routes->add('app_confirm_account', '/confirmation-compte')
+    $routes->add('app_confirm_account', '/confirmation-compte/{id}/{token}')
         ->controller([RegistrationController::class, 'verifyUserEmail'])
         ->methods(['GET']);
 

@@ -3,9 +3,9 @@
 <p>
     Vous venez de créer un compte sur le site Snowtricks et devez confirmer votre adresse email. Pour cela, veuillez
     cliquer sur le lien ci-dessous: <br><br>
-    <a href="{{ signedUrl }}">Confirmer mon compte</a>.
+    <a href="{{ url('app_confirm_account', {id: id, token: token} ) }}">Confirmer mon compte</a>.
 
-    Ce lien expire le {{ expiresAt }}.
+    Ce lien expire le {{ expiresAt|date }}.
 </p>
 <p>
     À bientôt !
