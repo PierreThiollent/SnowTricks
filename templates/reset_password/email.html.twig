@@ -2,10 +2,8 @@
 
 <p>Afin de réinitialiser votre mot de passe pour le site Snowtricks, veuillez cliquer sur le lien ci-dessous.</p>
 
-<a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
+<a href="{{ url('app_reset_password', {token: resetToken}) }}">{{ url('app_reset_password', {token: resetToken}) }}</a>
 
-<p>Ce lien expire
-    dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
-</p>
+<p> Ce lien expire le {{ expiresAt|date('d/m/Y') }}</p>
 
 <p>À bientôt !</p>

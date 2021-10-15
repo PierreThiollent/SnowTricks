@@ -8,26 +8,19 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JetBrains\PhpStorm\Pure;
 
-/**
- * @ORM\Entity(repositoryClass=CategoryRepository::class)
- */
+
+#[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string", length=50)
-     */
+    #[ORM\Column(type: 'string', length: 50)]
     private string $name;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="category", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Trick::class, orphanRemoval: true)]
     private Collection $tricks;
 
     #[Pure] public function __construct()

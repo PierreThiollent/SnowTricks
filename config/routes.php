@@ -31,10 +31,6 @@ return static function (RoutingConfigurator $routes) {
         ->controller([ResetPasswordController::class, 'request'])
         ->methods(['GET', 'POST']);
 
-    $routes->add('app_reset_password_check_email', '/reinitialisation-mot-de-passe/verif-email')
-        ->controller([ResetPasswordController::class, 'checkEmail'])
-        ->methods(['GET', 'POST']);
-
     $routes->add('app_reset_password', '/reinitialisation-mot-de-passe/{token}')
         ->controller([ResetPasswordController::class, 'reset'])
         ->methods(['GET', 'POST'])
