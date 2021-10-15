@@ -12,80 +12,50 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * @ORM\Entity(repositoryClass=UserRepository::class)
- * @UniqueEntity(fields={"username"}, message="Ce nom d'utilisateur n'est pas disponible.")
- * @UniqueEntity(fields={"email"}, message="Cette adresse email est déjà utilisée.")
- */
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity(fields: 'username', message: "Ce nom d'utilisateur n'est pas disponible.")]
+#[UniqueEntity(fields: 'email', message: "Cette adresse email est déjà utilisée.")]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     */
+    #[ORM\Column(type: 'string', length: 100, unique: true)]
     private string $username;
 
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[ORM\Column(type: 'json')]
     private array $roles;
 
-    /**
-     * @var string The hashed password
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: 'string')]
     private string $password;
 
-    /**
-     * @var string The user email
-     * @ORM\Column(type="string", unique=true)
-     */
+    #[ORM\Column(type: 'string', unique: true)]
     private string $email;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private bool $isVerified = false;
 
-    /**
-     * @ORM\Column(type="string", length=100, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 100, nullable: true)]
     private ?string $firstname;
 
-    /**
-     * @ORM\Column(type="string", length=100, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 100, nullable: true)]
     private ?string $lastname;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $imageUrl;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="user", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Trick::class, orphanRemoval: true)]
     private Collection $tricks;
 
-    /**
-     * @ORM\Column(type="string", length=100, nullable=true)
-     */
-    private ?string $verifyToken;
+    #[ORM\Column(type: 'string', length: 100, nullable: true)]
+    private ?string $token;
 
-    /**
-     * @ORM\Column(type="date", nullable=true)
-     */
-    private ?\DateTimeInterface $requestedAt;
+    #[ORM\Column(type: 'date')]
+    private ?\DateTimeInterface $createdAt;
 
-    /**
-     * @ORM\Column(type="date", nullable=true)
-     */
+    #[ORM\Column(type: 'date', nullable: true)]
     private ?\DateTimeInterface $expiresAt;
 
     /**
@@ -95,8 +65,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->roles = ['ROLE_USER'];
         $this->tricks = new ArrayCollection();
-        $this->requestedAt = new \DateTimeImmutable('now');
-        $this->verifyToken = bin2hex(random_bytes(20));
+        $this->createdAt = new \DateTimeImmutable('now');
+        $this->token = bin2hex(random_bytes(20));
         $this->expiresAt = new \DateTime('now +7 days');
     }
 
@@ -276,26 +246,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getVerifyToken(): ?string
+    public function getToken(): ?string
     {
-        return $this->verifyToken;
+        return $this->token;
     }
 
-    public function setVerifyToken(?string $verifyToken): self
+    public function setToken(?string $token): self
     {
-        $this->verifyToken = $verifyToken;
+        $this->token = $token;
 
         return $this;
     }
 
-    public function getRequestedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeInterface
     {
-        return $this->requestedAt;
+        return $this->createdAt;
     }
 
-    public function setRequestedAt(?\DateTimeInterface $requestedAt): self
+    public function setCreatedAt(?\DateTimeInterface $createdAt): self
     {
-        $this->requestedAt = $requestedAt;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
