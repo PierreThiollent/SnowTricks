@@ -35,7 +35,7 @@ class ConfirmAccountEmail
 
         $context = $email->getContext();
         $context['id'] = $user->getId();
-        $context['token'] = $user->getVerifyToken();
+        $context['token'] = $user->getToken();
         $context['expiresAt'] = $user->getExpiresAt();
         $email->context($context);
 
@@ -47,12 +47,12 @@ class ConfirmAccountEmail
      */
     public function handleEmailConfirmation(User $user, string $token): void
     {
-        if ($user->isExpired() || $token !== $user->getVerifyToken()) {
+        if ($user->isExpired() || $token !== $user->getToken()) {
             throw new \Exception('Votre lien de confirmation est expiré, veuillez nous contacter, nous vous enverrons un nouveau lien.');
         }
 
         $user->setIsVerified(true);
-        $user->setVerifyToken(null);
+        $user->setToken(null);
         $user->setExpiresAt(null);
 
         $this->entityManager->persist($user);
