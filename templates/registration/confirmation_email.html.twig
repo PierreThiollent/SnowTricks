@@ -5,7 +5,7 @@
     cliquer sur le lien ci-dessous: <br><br>
     <a href="{{ url('app_confirm_account', {id: id, token: token} ) }}">Confirmer mon compte</a>.
 
-    Ce lien expire le {{ expiresAt|date }}.
+    Ce lien expire le {{ expiresAt|date('d/m/Y') }}.
 </p>
 <p>
     À bientôt !
