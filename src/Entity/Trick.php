@@ -156,7 +156,7 @@ class Trick
      */
     public function getComments(): array
     {
-        return $this->comments->slice(0, 5);
+        return $this->comments->slice(0, 3);
     }
 
     public function addComment(Comment $comment): self
