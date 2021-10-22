@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Entity\Trick;
 use App\Form\CommentFormType;
+use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,6 +31,20 @@ class CommentController extends AbstractController
             ]);
         }
 
-        return new Response("Une erreur s'est produite, veuillez réessayer.", Response::HTTP_BAD_REQUEST);
+        return new Response(
+            "Une erreur s'est produite, veuillez réessayer.",
+            Response::HTTP_BAD_REQUEST
+        );
+    }
+
+    public function loadMore(int $offset, CommentRepository $repository): Response
+    {
+        $comments = $repository->findBy(
+            [], ['publishedAt' => 'ASC'], 3, $offset
+        );
+
+        return $this->render('comment/commentsLoop.html.twig', [
+            'comments' => $comments
+        ]);
     }
 }
