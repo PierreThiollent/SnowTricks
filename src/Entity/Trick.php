@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TrickRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -35,9 +37,19 @@ class Trick
     #[ORM\Column(type: 'date')]
     private \DateTimeInterface $publishedDate;
 
+    #[ORM\Column(type: 'string', unique: true)]
+    private string $slug;
+
+    #[ORM\Column(type: 'json')]
+    private array $videos = [];
+
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]
+    private Collection $comments;
+
     public function __construct()
     {
         $this->setPublishedDate(new \DateTime());
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -113,6 +125,56 @@ class Trick
     public function setPublishedDate(\DateTimeInterface $publishedDate): self
     {
         $this->publishedDate = $publishedDate;
+
+        return $this;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): void
+    {
+        $this->slug = $slug;
+    }
+
+    public function getVideos(): ?array
+    {
+        return $this->videos;
+    }
+
+    public function setVideos(array $videos): self
+    {
+        $this->videos = $videos;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getComments(): array
+    {
+        return $this->comments->slice(0, 5);
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        // set the owning side to null (unless already changed)
+        if ($this->comments->removeElement($comment) && $comment->getTrick() === $this) {
+            $comment->setTrick(null);
+        }
 
         return $this;
     }

@@ -58,6 +58,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'date', nullable: true)]
     private ?\DateTimeInterface $expiresAt;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Comment::class, orphanRemoval: true)]
+    private Collection $comments;
+
     /**
      * @throws \Exception
      */
@@ -68,6 +71,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->createdAt = new \DateTimeImmutable('now');
         $this->token = bin2hex(random_bytes(20));
         $this->expiresAt = new \DateTime('now +7 days');
+        $this->comments = new ArrayCollection();
+        $this->imageUrl = 'profile-avatar.jpg';
     }
 
     public function getId(): ?int
@@ -283,6 +288,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setExpiresAt(?\DateTimeInterface $expiresAt): self
     {
         $this->expiresAt = $expiresAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        // set the owning side to null (unless already changed)
+        if ($this->comments->removeElement($comment) && $comment->getUser() === $this) {
+            $comment->setUser(null);
+        }
 
         return $this;
     }

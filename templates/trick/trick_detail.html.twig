@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ trick.name }}
+{% endblock %}
+
+{% block body %}
+    <section class="flex flex-col justify-center bg-fixed bg-center bg-cover bg-no-repeat relative"
+             style="background-image:linear-gradient(90deg, rgba(31,41,55,1) 0%, rgba(255,255,255,0.3533614129245448) 100%), url({{ asset('images/hero.jpg') }});
+                     height: 600px">
+        <h1 class="ml-24 text-white text-6xl tracking-tight font-serif leading-none">
+            {{ trick.name }}
+        </h1>
+
+        {% if (is_granted('IS_AUTHENTICATED_FULLY') and trick.user.id == app.user.id) or (is_granted('ROLE_ADMIN')) %}
+            <div class="absolute right-14 top-8">
+                <button class="mr-2 inline-block">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                         stroke="#fff">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                </button>
+                <button class="inline-block" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                         stroke="#fff">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                </button>
+            </div>
+        {% endif %}
+    </section>
+
+    <section class="container flex justify-around flex-wrap mx-auto py-20 px-10">
+        {% for image in trick.images %}
+            <div class="max-w-md rounded flex-grow mb-5">
+                <img src="{{ asset('images/sad.jpg') }}"
+                     alt="{{ trick.name }} trick image">
+            </div>
+            <div class="max-w-md rounded flex-grow mb-5">
+                <img src="{{ asset('images/sad.jpg') }}"
+                     alt="{{ trick.name }} trick image">
+            </div>
+            <div class="max-w-md rounded flex-grow mb-5">
+                <img src="{{ asset('images/sad.jpg') }}"
+                     alt="{{ trick.name }} trick image">
+            </div>
+        {% endfor %}
+
+        {% for video in trick.videos %}
+            <iframe width="640" height="360" src="{{ video }}"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+        {% endfor %}
+    </section>
+
+    <hr class="max-w-2xl mx-auto">
+    <section class="container mx-auto px-10 py-4">
+        <p class="text-center">{{ trick.description }}</p>
+        <div class="max-w-md mx-auto mt-12 flex justify-around ">
+            <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                Publié le {{ trick.publishedDate|date('d/m/Y') }}
+            </span>
+            <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                {{ trick.category.name }}
+            </span>
+            <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                Date de modification
+            </span>
+        </div>
+    </section>
+    <hr class="max-w-2xl mx-auto mb-12">
+
+    <section class="mx-auto max-w-screen-sm px-10">
+        <h3 class="mb-4 text-lg font-semibold text-gray-900">Commentaires</h3>
+
+        {% if trick.comments|length > 0 %}
+            {% for comment in trick.comments %}
+                <div class="flex">
+                    <div class="flex-shrink-0 mr-3">
+                        <img class="mt-2 rounded-full w-8 h-8 sm:w-10 sm:h-10"
+                             src="https://images.unsplash.com/photo-1604426633861-11b2faead63c?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=200&h=200&q=80"
+                             alt="Image utilisateur {{ trick.user.userIdentifier }}">
+                    </div>
+                    <div class="flex-1 border rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
+                        {% if comment.user.firstname == '' and comment.user.lastname == '' %}
+                            <strong>{{ comment.user.userIdentifier }}</strong>
+                        {% else %}
+                            <strong>
+                                {{ comment.user.firstname }} {{ comment.user.lastname }}
+                            </strong>
+                        {% endif %}
+                        <span class="text-xs text-gray-400">{{ comment.publishedAt|date('d/m/Y') }}</span>
+                        <p class="text-sm">
+                            {{ comment.message }}
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+
+        {% else %}
+            <p>Aucun commentaire.</p>
+        {% endif %}
+
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <form class="bg-white rounded-lg py-2 mt-4">
+                <h2 class="py-2">Ajouter un commentaire</h2>
+                <div class="w-full md:w-full mb-2 mt-2">
+                        <textarea
+                                class="border border-gray-300 rounded-lg leading-relaxed resize-none w-full h-20 py-2 px-3 focus:outline-none focus:ring-0 focus:border-gray-600"
+                                name="body" required>
+                        </textarea>
+                </div>
+                <input type='submit'
+                       class="bg-white text-gray-700 py-1 px-4 border border-gray-400 rounded-lg ml-auto block mt-4 tracking-wide cursor-pointer"
+                       value='Ajouter'>
+            </form>
+        {% endif %}
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

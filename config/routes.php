@@ -4,6 +4,7 @@ use App\Controller\HomeController;
 use App\Controller\RegistrationController;
 use App\Controller\ResetPasswordController;
 use App\Controller\SecurityController;
+use App\Controller\TrickController;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
 return static function (RoutingConfigurator $routes) {
@@ -38,5 +39,9 @@ return static function (RoutingConfigurator $routes) {
 
     $routes->add('app_load_ajax_tricks', '/load-posts/{offset}')
         ->controller([HomeController::class, 'loadMoreTricks'])
+        ->methods(['GET']);
+
+    $routes->add('app_trick_show', '/trick/{slug}')
+        ->controller([TrickController::class, 'show'])
         ->methods(['GET']);
 };
