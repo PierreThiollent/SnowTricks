@@ -34,22 +34,15 @@
 
     <section class="container flex justify-around flex-wrap mx-auto py-20 px-10">
         {% for image in trick.images %}
-            <div class="max-w-md rounded flex-grow mb-5">
-                <img src="{{ asset('images/sad.jpg') }}"
-                     alt="{{ trick.name }} trick image">
-            </div>
-            <div class="max-w-md rounded flex-grow mb-5">
-                <img src="{{ asset('images/sad.jpg') }}"
-                     alt="{{ trick.name }} trick image">
-            </div>
-            <div class="max-w-md rounded flex-grow mb-5">
-                <img src="{{ asset('images/sad.jpg') }}"
+            <div class="max-w-md rounded flex-grow">
+                <img src="{{ asset('images/'~image) }}"
                      alt="{{ trick.name }} trick image">
             </div>
         {% endfor %}
 
         {% for video in trick.videos %}
             <iframe width="640" height="360" src="{{ video }}"
+                    class="mt-12"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen></iframe>
         {% endfor %}
@@ -72,50 +65,47 @@
     </section>
     <hr class="max-w-2xl mx-auto mb-12">
 
-    <section class="mx-auto max-w-screen-sm px-10">
+    <section class="mx-auto max-w-screen-sm px-10" x-data="loadMore">
         <h3 class="mb-4 text-lg font-semibold text-gray-900">Commentaires</h3>
 
         {% if trick.comments|length > 0 %}
             {% for comment in trick.comments %}
-                <div class="flex">
-                    <div class="flex-shrink-0 mr-3">
-                        <img class="mt-2 rounded-full w-8 h-8 sm:w-10 sm:h-10"
-                             src="https://images.unsplash.com/photo-1604426633861-11b2faead63c?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=200&h=200&q=80"
-                             alt="Image utilisateur {{ trick.user.userIdentifier }}">
-                    </div>
-                    <div class="flex-1 border rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
-                        {% if comment.user.firstname == '' and comment.user.lastname == '' %}
-                            <strong>{{ comment.user.userIdentifier }}</strong>
-                        {% else %}
-                            <strong>
-                                {{ comment.user.firstname }} {{ comment.user.lastname }}
-                            </strong>
-                        {% endif %}
-                        <span class="text-xs text-gray-400">{{ comment.publishedAt|date('d/m/Y') }}</span>
-                        <p class="text-sm">
-                            {{ comment.message }}
-                        </p>
-                    </div>
-                </div>
+                {{ include('comment/comment.html.twig') }}
             {% endfor %}
+
+            {# TODO fonctionnalite a finaliser #}
+            <button type='button'
+                    @click="fetchData('/load-comments', $el.parentNode.querySelectorAll('.comment-item'))"
+                    class="bg-white text-gray-700 py-1 px-4 border border-gray-400 rounded-lg mx-auto block mt-4 tracking-wide cursor-pointer">
+                Charger plus
+            </button>
 
         {% else %}
             <p>Aucun commentaire.</p>
         {% endif %}
 
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-            <form class="bg-white rounded-lg py-2 mt-4">
-                <h2 class="py-2">Ajouter un commentaire</h2>
-                <div class="w-full md:w-full mb-2 mt-2">
-                        <textarea
-                                class="border border-gray-300 rounded-lg leading-relaxed resize-none w-full h-20 py-2 px-3 focus:outline-none focus:ring-0 focus:border-gray-600"
-                                name="body" required>
-                        </textarea>
-                </div>
-                <input type='submit'
-                       class="bg-white text-gray-700 py-1 px-4 border border-gray-400 rounded-lg ml-auto block mt-4 tracking-wide cursor-pointer"
-                       value='Ajouter'>
-            </form>
+
+            {# Balise form #}
+            {{ form_start(commentForm, {'attr': {'class': 'bg-white rounded-lg py-2 mt-4', 'x-data': 'commentsForm' ,'@submit.prevent': 'postComment('~trick.id~')'} }) }}
+
+            <h2 class="py-2">Ajouter un commentaire</h2>
+            <div class="w-full md:w-full mb-2 mt-2">
+
+                {{ form_widget(commentForm.message, {
+                    'attr': {
+                        'class': 'add-comment-form border border-gray-300 rounded-lg leading-relaxed resize-none w-full h-20 py-2 px-3 focus:outline-none focus:ring-0 focus:border-gray-600',
+                    }
+                }) }}
+
+            </div>
+            <p class="error mt-2 text-red-600 text-sm hidden"></p>
+            <button type='submit'
+                    class="bg-white text-gray-700 py-1 px-4 border border-gray-400 rounded-lg ml-auto block mt-4 tracking-wide cursor-pointer">
+                Ajouter
+            </button>
+            {{ form_end(commentForm) }}
+
         {% endif %}
     </section>
 {% endblock %}
