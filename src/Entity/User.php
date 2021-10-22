@@ -72,6 +72,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->token = bin2hex(random_bytes(20));
         $this->expiresAt = new \DateTime('now +7 days');
         $this->comments = new ArrayCollection();
+        $this->imageUrl = 'profile-avatar.jpg';
     }
 
     public function getId(): ?int
