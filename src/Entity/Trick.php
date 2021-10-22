@@ -38,6 +38,9 @@ class Trick
     #[ORM\Column(type: 'string', unique: true)]
     private string $slug;
 
+    #[ORM\Column(type: 'json')]
+    private array $videos = [];
+
     public function __construct()
     {
         $this->setPublishedDate(new \DateTime());
@@ -128,5 +131,17 @@ class Trick
     public function setSlug(string $slug): void
     {
         $this->slug = $slug;
+    }
+
+    public function getVideos(): ?array
+    {
+        return $this->videos;
+    }
+
+    public function setVideos(array $videos): self
+    {
+        $this->videos = $videos;
+
+        return $this;
     }
 }
