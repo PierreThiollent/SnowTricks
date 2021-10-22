@@ -69,11 +69,9 @@
         <h3 class="mb-4 text-lg font-semibold text-gray-900">Commentaires</h3>
 
         {% if trick.comments|length > 0 %}
-            {% for comment in trick.comments %}
-                {{ include('comment/comment.html.twig') }}
-            {% endfor %}
+            {% set comments = trick.comments %}
+            {% include('comment/commentsLoop.html.twig') %}
 
-            {# TODO fonctionnalite a finaliser #}
             <button type='button'
                     @click="fetchData('/load-comments', $el.parentNode.querySelectorAll('.comment-item'))"
                     class="bg-white text-gray-700 py-1 px-4 border border-gray-400 rounded-lg mx-auto block mt-4 tracking-wide cursor-pointer">
