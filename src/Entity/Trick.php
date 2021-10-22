@@ -152,11 +152,11 @@ class Trick
     }
 
     /**
-     * @return Collection
+     * @return array
      */
-    public function getComments(): Collection
+    public function getComments(): array
     {
-        return $this->comments;
+        return $this->comments->slice(0, 5);
     }
 
     public function addComment(Comment $comment): self
