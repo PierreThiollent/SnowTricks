@@ -3,10 +3,8 @@
 namespace App\Service;
 
 use App\Entity\User;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
@@ -16,8 +14,6 @@ class ResetPassword
     public function __construct(
         private EntityManagerInterface $entityManager,
         private MailerInterface        $mailer,
-        private RequestStack           $requestStack,
-        private UserRepository         $userRepository
     )
     {
     }
@@ -63,12 +59,9 @@ class ResetPassword
     /**
      * @throws \Exception
      */
-    public function validateTokenAndFetchUser(string $token): User
+    public function validateToken(User $user): User
     {
-        $user = $this->userRepository
-            ->findOneBy(['token' => $token]);
-
-        if ($user === null || $user->isExpired()) {
+        if ($user->isExpired()) {
             throw new \Exception('Votre lien de réinitialisation est invalide ou expiré, veuillez refaire une demande de réinitialisation de mot de passe.');
         }
 

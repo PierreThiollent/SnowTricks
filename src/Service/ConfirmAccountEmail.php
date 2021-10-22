@@ -45,6 +45,7 @@ class ConfirmAccountEmail
     /**
      * @throws \Exception
      */
+    // TODO : exporter dans un service ValidateTokenService
     public function handleEmailConfirmation(User $user, string $token): void
     {
         if ($user->isExpired() || $token !== $user->getToken()) {
@@ -55,7 +56,6 @@ class ConfirmAccountEmail
         $user->setToken(null);
         $user->setExpiresAt(null);
 
-        $this->entityManager->persist($user);
         $this->entityManager->flush();
     }
 }
