@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\CommentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
@@ -27,6 +28,11 @@ class Comment
     #[ORM\Column(type: 'date')]
     private \DateTimeInterface $publishedAt;
 
+    public function __construct()
+    {
+        $this->publishedAt = new \DateTime();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -49,7 +55,7 @@ class Comment
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(User|UserInterface $user): self
     {
         $this->user = $user;
 

@@ -9,19 +9,44 @@
 import './styles/app.css';
 import Alpine from 'alpinejs'
 
-Alpine.data('loadMorePosts', () => ({
-        fetchPosts() {
-            const offset = document.getElementsByClassName('trick-item').length;
-            fetch('/load-posts/' + offset, {
-                headers: {
-                    "Content-Type": "text/html; charset=utf-8"
-                },
-            })
-                .then(data => data.text())
-                .then(result => document.getElementById('tricks').innerHTML += result)
-                .catch(error => {
-                    console.log('une erreur s\'est produite', error);
-                });
+Alpine.data('loadMore', () => ({
+        async fetchData(url, items) {
+            const response = await fetch(`${url}/${items.length}`);
+            const text = await response.text();
+            items[items.length - 1].insertAdjacentHTML('afterend', text);
+        }
+    })
+);
+
+Alpine.data('commentsForm', () => ({
+
+        /**
+         * Methode ajoutant un commentaire en ajax
+         * @param id
+         * @return {Promise<void>}
+         */
+        async postComment(id) {
+            this.content = new FormData(this.$el);
+
+            const response = await fetch(`/comment/new/${id}`, {
+                body: this.content,
+                method: 'POST'
+            });
+
+            const text = await response.text();
+
+            if (response.ok) {
+                document.querySelector('.comment-item:last-of-type').insertAdjacentHTML('afterend', text);
+            } else {
+                const error = this.$el.querySelector('.error');
+                error.innerText = text;
+                error.classList.remove('hidden');
+
+                setTimeout(() => {
+                    error.classList.add('hidden');
+                    error.innerText = ''
+                }, 3500);
+            }
         }
     })
 );

@@ -1,0 +1,22 @@
+{% block body %}
+    <div class="flex mb-4 comment-item">
+        <div class="flex-shrink-0 mr-3">
+            <img class="mt-2 rounded-full w-8 h-8 sm:w-10 sm:h-10"
+                 src="{{ asset('images/'~comment.user.imageUrl) }}"
+                 alt="Image utilisateur {{ comment.user.userIdentifier }}">
+        </div>
+        <div class="flex-1 border rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
+            {% if comment.user.firstname == '' and comment.user.lastname == '' %}
+                <strong>{{ comment.user.userIdentifier }}</strong>
+            {% else %}
+                <strong>
+                    {{ comment.user.firstname }} {{ comment.user.lastname }}
+                </strong>
+            {% endif %}
+            <span class="text-xs text-gray-400">{{ comment.publishedAt|date('d/m/Y') }}</span>
+            <p class="text-sm">
+                {{ comment.message }}
+            </p>
+        </div>
+    </div>
+{% endblock %}
