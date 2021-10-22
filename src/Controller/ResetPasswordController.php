@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Form\ChangePasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
 use App\Repository\UserRepository;
@@ -52,14 +53,10 @@ class ResetPasswordController extends AbstractController
     /**
      * Validates and process the reset URL that the user clicked in their email.
      */
-    public function reset(Request $request, UserPasswordHasherInterface $passwordEncoder, string $token = null): Response
+    public function reset(Request $request, UserPasswordHasherInterface $passwordEncoder, User $user): Response
     {
-        if ($token === null) {
-            throw $this->createNotFoundException("Votre lien de réinitialisation est incorrect");
-        }
-
         try {
-            $user = $this->resetPassword->validateTokenAndFetchUser($token);
+            $user = $this->resetPassword->validateToken($user);
         } catch (\Exception $exception) {
             $this->addFlash('error', $exception->getMessage());
 

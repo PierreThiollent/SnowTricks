@@ -1,9 +1,12 @@
 {% for trick in tricks %}
-    <div class="max-w-md rounded overflow-hidden shadow-lg mb-8 trick-item mr-5">
-        <img class="w-full max-h-60 object-cover object-center" src="images/{{ trick.images[0] }}"
-             alt="{{ trick.name }} photo">
+    <div class="max-w-xs rounded overflow-hidden shadow-lg mb-8 trick-item mr-5">
+        <a href="{{ path('app_trick_show', {slug: trick.slug}) }}">
+            <img class="w-full max-h-60 object-cover object-center" src="images/{{ trick.images[0] }}"
+                 alt="{{ trick.name }} photo">
+        </a>
         <div class="p-6">
-            <div class="font-bold text-xl mb-2">{{ trick.name }}</div>
+            <a href="{{ path('app_trick_show', {slug: trick.slug}) }}"
+               class="font-bold text-xl mb-2 inline-block">{{ trick.name }}</a>
             <p class="text-gray-700 text-base">
                 {{ trick.description }}
             </p>

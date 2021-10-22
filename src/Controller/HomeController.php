@@ -25,7 +25,7 @@ class HomeController extends AbstractController
             [], ['publishedDate' => 'ASC'], 5, $offset
         );
 
-        return $this->render('tricks/tricks.html.twig', [
+        return $this->render('trick/tricksLoop.html.twig', [
             'tricks' => $tricks
         ]);
     }
