@@ -55,7 +55,6 @@
         {% endfor %}
     </section>
 
-
     <hr class="max-w-2xl mx-auto">
     <section class="container mx-auto px-10 py-4">
         <p class="text-center">{{ trick.description }}</p>
@@ -73,14 +72,44 @@
     </section>
     <hr class="max-w-2xl mx-auto mb-12">
 
-    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        <section class="container flex mx-auto items-center justify-center shadow-lg mb-4 max-w-lg">
-            <form class="w-full max-w-xl bg-white rounded-lg px-4 pt-2">
+    <section class="mx-auto max-w-screen-sm px-10">
+        <h3 class="mb-4 text-lg font-semibold text-gray-900">Commentaires</h3>
+
+        {% if trick.comments|length > 0 %}
+            {% for comment in trick.comments %}
+                <div class="flex">
+                    <div class="flex-shrink-0 mr-3">
+                        <img class="mt-2 rounded-full w-8 h-8 sm:w-10 sm:h-10"
+                             src="https://images.unsplash.com/photo-1604426633861-11b2faead63c?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=200&h=200&q=80"
+                             alt="Image utilisateur {{ trick.user.userIdentifier }}">
+                    </div>
+                    <div class="flex-1 border rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
+                        {% if comment.user.firstname == '' and comment.user.lastname == '' %}
+                            <strong>{{ comment.user.userIdentifier }}</strong>
+                        {% else %}
+                            <strong>
+                                {{ comment.user.firstname }} {{ comment.user.lastname }}
+                            </strong>
+                        {% endif %}
+                        <span class="text-xs text-gray-400">{{ comment.publishedAt|date('d/m/Y') }}</span>
+                        <p class="text-sm">
+                            {{ comment.message }}
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+
+        {% else %}
+            <p>Aucun commentaire.</p>
+        {% endif %}
+
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <form class="bg-white rounded-lg px-4 py-2 mt-4 shadow-lg">
                 <div class="flex flex-wrap -mx-3 mb-6">
                     <h2 class="px-4 pt-3 pb-2 text-gray-800 text-lg">Ajouter un commentaire</h2>
                     <div class="w-full md:w-full px-3 mb-2 mt-2">
                         <textarea
-                                class="bg-gray-100 rounded border border-gray-400 leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white"
+                                class="border rounded-lg leading-relaxed resize-none w-full h-20 py-2 px-3 focus:outline-none"
                                 name="body" required></textarea>
                     </div>
                     <div class="w-full md:w-full flex items-start md:w-full px-3">
@@ -94,16 +123,15 @@
                         </div>
                         <div class="-mr-1">
                             <input type='submit'
-                                   class="bg-white text-gray-700 font-medium py-1 px-4 border border-gray-400 rounded-lg tracking-wide mr-1 hover:bg-gray-100"
+                                   class="bg-white text-gray-700 font-medium py-1 px-4 border border-gray-400 rounded-lg tracking-wide mr-1 hover:bg-gray-100 cursor-pointer"
                                    value='Ajouter'>
                         </div>
                     </div>
                 </div>
             </form>
-        </section>
-    {% endif %}
-
+        {% endif %}
+    </section>
 {% endblock %}
 
-    {% block javascripts %}
-    {% endblock %}
+{% block javascripts %}
+{% endblock %}
