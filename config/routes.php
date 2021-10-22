@@ -1,5 +1,6 @@
 <?php
 
+use App\Controller\CommentController;
 use App\Controller\HomeController;
 use App\Controller\RegistrationController;
 use App\Controller\ResetPasswordController;
@@ -44,4 +45,8 @@ return static function (RoutingConfigurator $routes) {
     $routes->add('app_trick_show', '/trick/{slug}')
         ->controller([TrickController::class, 'show'])
         ->methods(['GET']);
+
+    $routes->add('app_comment_new', '/comment/new/{trickId}')
+        ->controller([CommentController::class, 'new'])
+        ->methods(['POST']);
 };
