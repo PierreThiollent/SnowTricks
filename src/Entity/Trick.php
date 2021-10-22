@@ -35,6 +35,9 @@ class Trick
     #[ORM\Column(type: 'date')]
     private \DateTimeInterface $publishedDate;
 
+    #[ORM\Column(type: 'string', unique: true)]
+    private string $slug;
+
     public function __construct()
     {
         $this->setPublishedDate(new \DateTime());
@@ -115,5 +118,15 @@ class Trick
         $this->publishedDate = $publishedDate;
 
         return $this;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): void
+    {
+        $this->slug = $slug;
     }
 }
