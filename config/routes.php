@@ -46,7 +46,11 @@ return static function (RoutingConfigurator $routes) {
         ->controller([TrickController::class, 'show'])
         ->methods(['GET']);
 
-    $routes->add('app_comment_new', '/comment/new/{trickId}')
+    $routes->add('app_comment_new', '/comment/new/{id}')
         ->controller([CommentController::class, 'new'])
         ->methods(['POST']);
+
+    $routes->add('app_load_ajax_comments', '/load-comments/{offset}')
+        ->controller([CommentController::class, 'loadMore'])
+        ->methods(['GET']);
 };
