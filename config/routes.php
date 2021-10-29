@@ -42,6 +42,10 @@ return static function (RoutingConfigurator $routes) {
         ->controller([HomeController::class, 'loadMoreTricks'])
         ->methods(['GET']);
 
+    $routes->add('app_trick_new', '/trick/new')
+        ->controller([TrickController::class, 'new'])
+        ->methods(['GET', 'POST']);
+
     $routes->add('app_trick_show', '/trick/{slug}')
         ->controller([TrickController::class, 'show'])
         ->methods(['GET']);
