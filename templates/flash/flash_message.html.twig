@@ -1,5 +1,5 @@
 {% for successMessage in app.flashes('success') %}
-    <div class="max-w-7xl px-2 sm:px-6 lg:px-8 absolute top-16 left-1/2 transform -translate-x-1/2 w-full">
+    <div class="max-w-7xl px-2 sm:px-6 lg:px-8 sticky mx-auto top-16 w-full">
         <div x-data
              class="py-3 px-5 mt-6 mb-4 bg-green-100 text-green-900 text-base rounded-md border border-green-200 relative"
              role="alert">
@@ -14,7 +14,7 @@
 {% endfor %}
 
 {% for errorMessage in app.flashes('error') %}
-    <div class="max-w-7xl px-2 sm:px-6 lg:px-8 absolute top-16 left-1/2 transform -translate-x-1/2 w-full">
+    <div class="max-w-7xl px-2 sm:px-6 lg:px-8 sticky mx-auto top-16 w-full">
         <div x-data
              class="py-3 px-5 mb-4 mt-6 bg-red-100 text-red-900 text-base rounded-md border border-red-200 relative"
              role="alert">
