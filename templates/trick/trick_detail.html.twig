@@ -35,17 +35,17 @@
     <section class="container flex justify-around flex-wrap mx-auto py-20 px-10">
         {% for image in trick.images %}
             <div class="max-w-md rounded flex-grow">
-                <img src="{{ asset('images/'~image) }}"
+                <img src="{{ asset('images/tricks/' ~ image) }}"
                      alt="{{ trick.name }} trick image">
             </div>
         {% endfor %}
 
-        {% for video in trick.videos %}
-            <iframe width="640" height="360" src="{{ video }}"
-                    class="mt-12"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen></iframe>
-        {% endfor %}
+        <iframe width="640" height="360" src="{{ trick.video }}"
+                class="mt-12"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+        </iframe>
+
     </section>
 
     <hr class="max-w-2xl mx-auto">
