@@ -48,6 +48,7 @@ class Trick
     private string $slug;
 
     #[ORM\Column(type: 'string')]
+    #[Assert\Url(message: 'Vous devez renseigner une url pour la video (exemple : https://www.youtube.com/embed/jm19nEvmZgM).')]
     #[Assert\NotBlank(message: 'Veuillez renseigner une vidéo.')]
     private string $video;
 
