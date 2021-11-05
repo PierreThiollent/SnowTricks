@@ -51,4 +51,26 @@ Alpine.data('commentsForm', () => ({
     })
 );
 
+Alpine.data('imageUpload', () => ({
+        files: [],
+        setFileInput() {
+            const targetFiles = new DataTransfer();
+            this.files.forEach(file => targetFiles.items.add(file));
+            this.$event.target.files = targetFiles.files;
+        },
+
+        updateFiles() {
+            let uploadedFiles = Array.from(this.$event.target.files);
+            this.files = this.files.concat(uploadedFiles).slice(0, 3);
+            this.setFileInput();
+        },
+
+
+        deleteFile(file) {
+            this.files = this.files.filter(f => f !== file);
+            this.setFileInput();
+        },
+    })
+);
+
 Alpine.start()
