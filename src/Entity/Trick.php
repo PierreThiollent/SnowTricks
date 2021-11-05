@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
 #[UniqueEntity(fields: ['name'], message: 'Ce nom de trick est déjà utilisé, veuillez en choisir un autre.')]
@@ -18,12 +20,16 @@ class Trick
     private int $id;
 
     #[ORM\Column(type: 'string', length: 100, unique: true)]
+    #[Assert\NotBlank(message: 'Veuillez renseigner un nom de trick.')]
     private string $name;
 
     #[ORM\Column(type: 'text')]
+    #[Assert\NotBlank(message: 'Veuillez renseigner une description.')]
     private string $description;
 
     #[ORM\Column(type: 'json')]
+    #[Assert\Count(max: 3, maxMessage: 'Vous ne pouvez pas ajouter plus de 3 images.')]
+    #[Assert\NotBlank(message: 'Veuillez renseigner au moins une image.')]
     private array $images = [];
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tricks')]
@@ -32,6 +38,7 @@ class Trick
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'tricks')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank(message: 'Veuillez séléctionner une catégorie.')]
     private Category $category;
 
     #[ORM\Column(type: 'date')]
@@ -40,8 +47,9 @@ class Trick
     #[ORM\Column(type: 'string', unique: true)]
     private string $slug;
 
-    #[ORM\Column(type: 'json')]
-    private array $videos = [];
+    #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank(message: 'Veuillez renseigner une vidéo.')]
+    private string $video;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
@@ -98,7 +106,7 @@ class Trick
         return $this->user;
     }
 
-    public function setUser(User $user): self
+    public function setUser(User|UserInterface $user): self
     {
         $this->user = $user;
 
@@ -139,14 +147,14 @@ class Trick
         $this->slug = $slug;
     }
 
-    public function getVideos(): ?array
+    public function getVideo(): string
     {
-        return $this->videos;
+        return $this->video;
     }
 
-    public function setVideos(array $videos): self
+    public function setVideo(string $video): self
     {
-        $this->videos = $videos;
+        $this->video = $video;
 
         return $this;
     }
