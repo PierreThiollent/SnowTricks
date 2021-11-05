@@ -19,6 +19,7 @@ class TrickController extends AbstractController
     public function __construct(
         private SluggerInterface       $slugger,
         private EntityManagerInterface $entityManager,
+        private FileUploader           $fileUploader
     )
     {
     }
@@ -34,7 +35,7 @@ class TrickController extends AbstractController
         ]);
     }
 
-    public function new(Request $request, FileUploader $fileUploader): Response
+    public function new(Request $request): Response
     {
         $trick = new Trick();
         $form = $this->createForm(NewTrickFormType::class, $trick);
@@ -45,7 +46,7 @@ class TrickController extends AbstractController
             $imagesNames = [];
 
             foreach ($images as $image) {
-                $imagesNames[] = $fileUploader->upload($image);
+                $imagesNames[] = $this->fileUploader->upload($image);
             }
 
             $trick->setImages($imagesNames);
@@ -71,6 +72,10 @@ class TrickController extends AbstractController
 
         if ($trick?->getUser() !== $user || !in_array('ROLE_ADMIN', $user?->getRoles(), true)) {
             return $this->redirectToRoute('app_home');
+        }
+
+        foreach ($trick->getImages() as $image) {
+            $this->fileUploader->remove($image);
         }
 
         $entityManager = $this->getDoctrine()->getManager();
