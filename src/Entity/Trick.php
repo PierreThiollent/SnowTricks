@@ -28,8 +28,6 @@ class Trick
     private string $description;
 
     #[ORM\Column(type: 'json')]
-    #[Assert\Count(max: 3, maxMessage: 'Vous ne pouvez pas ajouter plus de 3 images.')]
-    #[Assert\NotBlank(message: 'Veuillez renseigner au moins une image.')]
     private array $images = [];
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tricks')]

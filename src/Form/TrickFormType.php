@@ -12,9 +12,11 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\All;
+use Symfony\Component\Validator\Constraints\Count;
 use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
-class NewTrickFormType extends AbstractType
+class TrickFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -24,6 +26,13 @@ class NewTrickFormType extends AbstractType
             ->add('images', FileType::class, [
                 'multiple'    => true,
                 'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez renseigner au moins une image.',
+                    ]),
+                    new Count([
+                        'max'        => 3,
+                        'maxMessage' => 'Vous ne pouvez pas ajouter plus de 3 images.',
+                    ]),
                     new All([
                         'constraints' => [
                             new Image([
@@ -46,6 +55,7 @@ class NewTrickFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Trick::class,
+            'validation_groups'
         ]);
     }
 }

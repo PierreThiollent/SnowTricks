@@ -29,7 +29,7 @@
     </section>
 
     <section x-data="loadMore" class="mb-24">
-        <div id="tricks" class="px-10 py-20 flex justify-around flex-wrap">
+        <div id="tricks" class="p-20 flex justify-around xl:justify-evenly flex-wrap">
             {% include 'trick/tricksLoop.html.twig' %}
         </div>
 
@@ -42,4 +42,5 @@
 {% endblock %}
 
 {% block javascripts %}
+    {{ encore_entry_script_tags('loadMore') }}
 {% endblock %}

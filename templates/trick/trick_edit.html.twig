@@ -1,13 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    Ajouter un trick
+    Modifier le trick {{ trick.name }}
 {% endblock %}
 
 {% block body %}
     <section class="max-w-4xl mx-auto px-10 py-4 mt-5">
-        <h1 class="text-xl font-medium my-5">Ajouter un trick</h1>
-        {{ form_start(newTrickForm, {'attr': {'class': 'mt-8 space-y-6'} }) }}
+        <h1 class="text-xl font-medium my-5">
+            Modifier le trick {{ trick.name }}
+        </h1>
+
+        {{ form_start(editTrickForm, {'attr': {'class': 'mt-8 space-y-6'} }) }}
         <div class="shadow sm:rounded-md sm:overflow-hidden">
             <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
 
@@ -16,15 +19,15 @@
                         Nom
                     </label>
                     <div class="mt-1 rounded-md shadow-sm">
-                        {{ form_widget(newTrickForm.name, {
+                        {{ form_widget(editTrickForm.name, {
                             'attr': {
                                 'class': 'focus:ring-gray-800 focus:border-gray-800 flex-1 block w-full rounded-md sm:text-sm border-gray-300'
                             }
                         }) }}
 
-                        {% if newTrickForm.name.vars.errors|length > 0 %}
+                        {% if editTrickForm.name.vars.errors|length > 0 %}
                             <small class="inline-block my-2 text-xs text-red-500">
-                                {{ newTrickForm.name.vars.errors[0].message }}
+                                {{ editTrickForm.name.vars.errors[0].message }}
                             </small>
                         {% endif %}
 
@@ -36,16 +39,16 @@
                         Description
                     </label>
                     <div class="mt-1">
-                        {{ form_widget(newTrickForm.description, {
+                        {{ form_widget(editTrickForm.description, {
                             'attr': {
-                                'class': 'shadow-sm focus:ring-gray-800 focus:border-gray-800 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md',
+                                'class': 'shadow-sm focus:ring-gray-800 focus:border-gray-800 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md py-2 px-3',
                                 'rows': '3'
                             }
                         }) }}
 
-                        {% if newTrickForm.description.vars.errors|length > 0 %}
+                        {% if editTrickForm.description.vars.errors|length > 0 %}
                             <small class="inline-block my-2 text-xs text-red-500">
-                                {{ newTrickForm.description.vars.errors[0].message }}
+                                {{ editTrickForm.description.vars.errors[0].message }}
                             </small>
                         {% endif %}
 
@@ -56,20 +59,20 @@
                     <label for="category" class="block text-sm font-medium text-gray-700">
                         Catégorie
                     </label>
-                    {{ form_widget(newTrickForm.category, {
+                    {{ form_widget(editTrickForm.category, {
                         'attr': {
                             'class': 'mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-gray-800 focus:border-gray-800 sm:text-sm'
                         }
                     }) }}
 
-                    {% if newTrickForm.category.vars.errors|length > 0 %}
+                    {% if editTrickForm.category.vars.errors|length > 0 %}
                         <small class="inline-block my-2 text-xs text-red-500">
-                            {{ newTrickForm.category.vars.errors[0].message }}
+                            {{ editTrickForm.category.vars.errors[0].message }}
                         </small>
                     {% endif %}
                 </div>
 
-                <div x-data="imageUpload()">
+                <div x-data="imageUpload({{ trick.id }})">
                     <label class="block text-sm font-medium text-gray-700">
                         Images
                     </label>
@@ -86,12 +89,13 @@
                                        :class="files.length === 3 && 'cursor-not-allowed'"
                                        class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-gray-800">
                                     <span :class="files.length === 3 && 'text-gray-400'">Cliquez ici</span>
-                                    {{ form_widget(newTrickForm.images, {
+                                    {{ form_widget(editTrickForm.images, {
                                         'attr': {
                                             'class': 'sr-only',
                                             '@change': 'updateFiles',
                                             ':readonly': 'files.length === 3',
-                                            'x-ref': 'input'
+                                            'x-ref': 'input',
+                                            ':required': 'files.length < 1'
                                         }
                                     }) }}
                                 </label>
@@ -116,9 +120,9 @@
                         </div>
                     </template>
 
-                    {% if newTrickForm.images.vars.errors|length > 0 %}
+                    {% if editTrickForm.images.vars.errors|length > 0 %}
                         <small class="inline-block my-2 text-xs text-red-500">
-                            {{ newTrickForm.images.vars.errors[0].message }}
+                            {{ editTrickForm.images.vars.errors[0].message }}
                         </small>
                     {% endif %}
 
@@ -129,16 +133,16 @@
                         Vidéo
                     </label>
                     <div class="mt-1 rounded-md shadow-sm">
-                        {{ form_widget(newTrickForm.video, {
+                        {{ form_widget(editTrickForm.video, {
                             'attr': {
                                 'class': 'focus:ring-gray-800 focus:border-gray-800 flex-1 block w-full rounded-md sm:text-sm border-gray-300',
                                 'placeholder': 'https://www.youtube.com/embed/jm19nEvmZgM'
                             }
                         }) }}
 
-                        {% if newTrickForm.video.vars.errors|length > 0 %}
+                        {% if editTrickForm.video.vars.errors|length > 0 %}
                             <small class="inline-block my-2 text-xs text-red-500">
-                                {{ newTrickForm.video.vars.errors[0].message }}
+                                {{ editTrickForm.video.vars.errors[0].message }}
                             </small>
                         {% endif %}
 
@@ -152,7 +156,7 @@
                 </button>
             </div>
         </div>
-        {{ form_end(newTrickForm) }}
+        {{ form_end(editTrickForm) }}
     </section>
 {% endblock %}
 
