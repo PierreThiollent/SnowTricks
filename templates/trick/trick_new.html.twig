@@ -69,7 +69,7 @@
                     {% endif %}
                 </div>
 
-                <div x-data="imageUpload">
+                <div x-data="imageUpload()">
                     <label class="block text-sm font-medium text-gray-700">
                         Images
                     </label>
@@ -82,7 +82,7 @@
                             </svg>
                             {# TODO https://codepen.io/jjjrmy/pen/gOPvmdv #}
                             <div class="flex text-sm text-gray-600">
-                                <label for="new_trick_form_images"
+                                <label for="trick_form_images"
                                        :class="files.length === 3 && 'cursor-not-allowed'"
                                        class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-gray-800">
                                     <span :class="files.length === 3 && 'text-gray-400'">Cliquez ici</span>
@@ -91,6 +91,7 @@
                                             'class': 'sr-only',
                                             '@change': 'updateFiles',
                                             ':readonly': 'files.length === 3',
+                                            'x-ref': 'input'
                                         }
                                     }) }}
                                 </label>
@@ -130,7 +131,8 @@
                     <div class="mt-1 rounded-md shadow-sm">
                         {{ form_widget(newTrickForm.video, {
                             'attr': {
-                                'class': 'focus:ring-gray-800 focus:border-gray-800 flex-1 block w-full rounded-md sm:text-sm border-gray-300'
+                                'class': 'focus:ring-gray-800 focus:border-gray-800 flex-1 block w-full rounded-md sm:text-sm border-gray-300',
+                                'placeholder': 'https://www.youtube.com/embed/jm19nEvmZgM'
                             }
                         }) }}
 
@@ -155,4 +157,5 @@
 {% endblock %}
 
 {% block javascripts %}
+    {{ encore_entry_script_tags('imageUpload') }}
 {% endblock %}
