@@ -5,10 +5,11 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Entity\Trick;
 use App\Form\CommentFormType;
-use App\Form\NewTrickFormType;
+use App\Form\TrickFormType;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,7 +39,7 @@ class TrickController extends AbstractController
     public function new(Request $request): Response
     {
         $trick = new Trick();
-        $form = $this->createForm(NewTrickFormType::class, $trick);
+        $form = $this->createForm(TrickFormType::class, $trick);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -51,7 +52,7 @@ class TrickController extends AbstractController
 
             $trick->setImages($imagesNames);
             $trick->setUser($this->getUser());
-            $trick->setSlug($this->slugger->slug($form->get('name')->getData()));
+            $trick->setSlug($this->slugger->slug($form->get('name')->getData())->lower());
 
             $this->entityManager->persist($trick);
             $this->entityManager->flush();
@@ -62,7 +63,7 @@ class TrickController extends AbstractController
         }
 
         return $this->render('trick/trick_new.html.twig', [
-            'newTrickForm' => $form->createView()
+            'newTrickForm' => $form->createView(),
         ]);
     }
 
@@ -85,5 +86,45 @@ class TrickController extends AbstractController
         $this->addFlash('success', 'Le post a bien été supprimé.');
 
         return $this->redirectToRoute('app_home');
+    }
+
+    public function edit(Trick $trick, Request $request): Response
+    {
+        $form = $this->createForm(TrickFormType::class, $trick);
+        $trickImages = $trick->getImages();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $uploadedImages = $form->get('images')->getData();
+
+            foreach ($trickImages as $image) {
+                if (!in_array($image, array_map(static fn($image) => $image->getClientOriginalName(), $uploadedImages), true)) {
+                    $trickImages = array_diff($trickImages, [$image]);
+                    $this->fileUploader->remove($image);
+                }
+            }
+
+            foreach ($uploadedImages as $image) {
+                if (!in_array($image->getClientOriginalName(), $trickImages, true)) {
+                    $trickImages[] = $this->fileUploader->upload($image);
+                }
+            }
+
+            $trick->setImages($trickImages);
+            $trick->setSlug($this->slugger->slug($form->get('name')->getData())->lower());
+            $this->entityManager->flush();
+
+            $this->addFlash('success', 'Le post a bien été mis à jour.');
+        }
+
+        return $this->render('trick/trick_edit.html.twig', [
+            'editTrickForm' => $form->createView(),
+            'trick'         => $trick,
+        ]);
+    }
+
+    public function getImages(Trick $trick): JsonResponse
+    {
+        return new JsonResponse($trick->getImages());
     }
 }
