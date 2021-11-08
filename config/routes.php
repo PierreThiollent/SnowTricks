@@ -69,8 +69,4 @@ return static function (RoutingConfigurator $routes) {
     $routes->add('app_load_ajax_trick_images', '/trick/get-images/{id}')
         ->controller([TrickController::class, 'getImages'])
         ->methods(['GET']);
-
-    $routes->add('app_ajax_trick_delete_image', '/trick/delete-image/{id}/{imageName}')
-        ->controller([TrickController::class, 'deleteImage'])
-        ->methods(['GET']);
 };
