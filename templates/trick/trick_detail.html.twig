@@ -137,7 +137,7 @@
     </section>
     <hr class="max-w-2xl mx-auto mb-12">
 
-    <section class="mx-auto max-w-screen-sm px-10" x-data="loadMore">
+    <section class="mx-auto max-w-screen-sm px-10 commentaires" x-data="loadMore">
         <h3 class="mb-4 text-lg font-semibold text-gray-900">Commentaires</h3>
 
         {% if trick.comments|length > 0 %}
@@ -151,13 +151,18 @@
             </button>
 
         {% else %}
-            <p>Aucun commentaire.</p>
+            <p class="no-comments">Aucun commentaire.</p>
         {% endif %}
 
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
 
             {# Balise form #}
-            {{ form_start(commentForm, {'attr': {'class': 'bg-white rounded-lg py-2 mt-4', 'x-data': 'commentsForm' ,'@submit.prevent': 'postComment('~trick.id~')'} }) }}
+            {{ form_start(commentForm, {
+                'attr': {
+                    'class': 'bg-white rounded-lg py-2 mt-4',
+                    'x-data': 'commentsForm' ,
+                    '@submit.prevent': 'postComment('~trick.id~')'
+                } }) }}
 
             <h2 class="py-2">Ajouter un commentaire</h2>
             <div class="w-full md:w-full mb-2 mt-2">
