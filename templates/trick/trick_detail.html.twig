@@ -104,21 +104,30 @@
         {% endif %}
     </section>
 
-    <section class="container flex justify-around flex-wrap mx-auto py-20 px-10">
-        {% for image in trick.images %}
-            <div class="max-w-md rounded flex-grow">
-                <img src="{{ asset('images/tricks/' ~ image) }}"
-                     alt="{{ trick.name }} trick image">
-            </div>
-        {% endfor %}
+    <div x-data="{ open: false }">
+        <section :class="!open ? 'hidden' : ''"
+                 class="container justify-around flex-wrap mx-auto py-20 px-10 md:flex">
+            {% for image in trick.images %}
+                <div class="max-w-md rounded flex-grow">
+                    <img src="{{ asset('images/tricks/' ~ image) }}"
+                         alt="{{ trick.name }} trick image">
+                </div>
+            {% endfor %}
 
-        <iframe width="640" height="360" src="{{ trick.video }}"
-                class="mt-12"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen>
-        </iframe>
+            <iframe width="640" height="360" src="{{ trick.video }}"
+                    class="mt-12"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+            </iframe>
 
-    </section>
+        </section>
+
+        <button @click="open = true"
+                x-show="!open"
+                class="block mx-auto md:hidden bg-white text-gray-700 py-1 px-4 border border-gray-400 rounded-lg mx-auto block mt-4 tracking-wide cursor-pointer">
+            Voir les images
+        </button>
+    </div>
 
     <hr class="max-w-2xl mx-auto">
     <section class="container mx-auto px-10 py-4">
