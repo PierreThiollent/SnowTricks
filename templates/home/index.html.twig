@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Accueil
+{% endblock %}
+
+{% block body %}
+
+    <section class="flex flex-col justify-center h-screen bg-fixed bg-center bg-cover bg-no-repeat"
+             style=" background-image:linear-gradient(90deg, rgba(31,41,55,1) 0%, rgba(255,255,255,0.3533614129245448) 100%), url({{ asset('images/hero.jpg') }})">
+        <h1 class="ml-24 text-white text-6xl tracking-tight font-serif leading-none">
+            Bienvenue sur Snowtricks
+        </h1>
+        <p class="mt-4 mx-24 text-xl text-white font-sans text-opacity-75">
+            Ce site web est un blog communautaire autour du Snowboard.
+        </p>
+        <p class="mx-24 mt-8">
+            <a class="px-4 py-2 border-2 border-white rounded text-white text-lg hover:bg-white hover:text-gray-800"
+               href="#tricks">Consulter les tricks</a>
+        </p>
+        <a href="#tricks" title="Voir les tricks" class="absolute bottom-12 right-12">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                 stroke="#1f2937">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z"/>
+            </svg>
+        </a>
+    </section>
+
+    <section x-data="loadMore" class="mb-24">
+        <div id="tricks" class="p-20 flex justify-around xl:justify-evenly flex-wrap">
+            {% include 'trick/tricksLoop.html.twig' %}
+        </div>
+
+        <button @click="fetchData('/load-posts', $el.parentNode.querySelectorAll('.trick-item'))"
+                class="block mt-4 mx-auto px-4 py-2 border-2 border-white rounded text-white text-lg bg-gray-800 hover:bg-white hover:text-gray-800">
+            Charger plus...
+        </button>
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('loadMore') }}
+{% endblock %}

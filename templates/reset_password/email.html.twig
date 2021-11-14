@@ -1,0 +1,9 @@
+<h1>Bonjour,</h1>
+
+<p>Afin de réinitialiser votre mot de passe pour le site Snowtricks, veuillez cliquer sur le lien ci-dessous.</p>
+
+<a href="{{ url('app_reset_password', {token: resetToken}) }}">{{ url('app_reset_password', {token: resetToken}) }}</a>
+
+<p> Ce lien expire le {{ expiresAt|date('d/m/Y') }}</p>
+
+<p>À bientôt !</p>
