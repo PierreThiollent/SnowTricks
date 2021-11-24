@@ -59,7 +59,7 @@ class TrickController extends AbstractController
 
             $this->addFlash('success', 'Votre trick a bien été ajouté.');
 
-            $this->redirectToRoute('app_trick_new');
+            $this->redirectToRoute('app_home');
         }
 
         return $this->render('trick/trick_new.html.twig', [
