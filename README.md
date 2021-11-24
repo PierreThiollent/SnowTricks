@@ -23,6 +23,8 @@ $ cd <project>
 
 ```
 $ composer install
+$ npm install
+$ npm run build
 ```
 
 ### Config
