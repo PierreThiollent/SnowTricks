@@ -40,7 +40,7 @@ class CommentController extends AbstractController
     public function loadMore(int $offset, CommentRepository $repository): Response
     {
         $comments = $repository->findBy(
-            [], ['publishedAt' => 'ASC'], 3, $offset
+            [], ['publishedAt' => 'ASC'], 10, $offset
         );
 
         return $this->render('comment/commentsLoop.html.twig', [
